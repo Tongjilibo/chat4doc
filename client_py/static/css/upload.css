@@ -1,0 +1,175 @@
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 思源黑体, 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 14px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0;
+}
+
+canvas {
+    display: block;
+}
+
+body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: linear-gradient(-8.21deg, rgba(0, 190, 255, 0.07999999821186066) 0%, rgba(20, 100, 250, 0.07999999821186066) 100%);
+    color: #333333;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+#root {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-width: 640px;
+    min-height: 540px;
+}
+
+footer, header {
+    padding: 0;
+    width: 100%;
+    height: 60px;
+}
+
+header {
+    background-color: #FFFFFF;
+}
+
+header img {
+    margin: 15px 48px;
+}
+
+footer {
+    text-align: center;
+}
+
+footer a {
+    color: #6E6E6E;
+    font-size: 12px;
+}
+
+main .wrapper {
+    /*height: calc(100.0vh - 60px - 60px);*/
+    display: flex;
+    justify-content: center;
+}
+main .wrapper .tips {
+    color: rgba(145, 145, 145, 1);
+    font-size: 12px;
+}
+main .wrapper > div.box {
+    width: 66.666666666666666666666666666667vw;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px 0 rgba(0, 80, 250, 0.318);
+    min-width: 640px;
+    min-height: 540px;
+    text-align: center;
+    margin: 50px 0;
+}
+
+main .wrapper .logo {
+    padding-top: 50px;
+}
+
+main .wrapper .brief {
+
+}
+
+main .wrapper .upload {
+
+}
+
+main .wrapper .upload .ready, .uploading, .done {
+    width: 280px;
+    margin: auto;
+    border-radius: 8px;
+    background: rgba(20, 100, 250, 0.08);
+    border: 1px solid rgba(20, 100, 250, 1);
+    color: rgba(51, 51, 51, 1);
+    font-size: 12px;
+}
+main .wrapper .upload .ready {
+    cursor: pointer;
+}
+main .wrapper .upload .ready div {
+    margin: 14px 0;
+}
+
+main .wrapper .upload .ready div:nth-child(2) {
+    color: rgba(20, 100, 250, 1);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+main .wrapper .upload .ready {
+    border: 1px dashed rgba(20, 100, 250, 1);
+}
+
+main .wrapper .upload .uploading, .done {
+    display: flex;
+    height: 100%;
+}
+
+main .wrapper .upload .uploading, .done {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main .wrapper .upload .uploading div:nth-child(2), .done div:nth-child(2) {
+    width: 100%;
+    text-align: left;
+    padding: 0 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+main .wrapper .upload .uploading div:first-child, .done div:first-child {
+    padding-left: 16px;
+}
+
+main .wrapper .upload .uploading div:last-child, .done div:last-child {
+    padding-right: 16px;
+}
+
+main .wrapper .action button {
+    border-radius: 8px;
+    background-color: rgba(20, 100, 250, 1);
+    color: rgba(255, 255, 255, 1);
+    width: 280px;
+    height: 36px;
+    border: none;
+    margin: 16px 0;
+    cursor: pointer;
+}
+
+main .wrapper .action button:disabled {
+    background-color: rgba(200, 200, 200, 1);
+
+}
+
+main .wrapper .tips {
+
+}
+
+main .wrapper .tips p:last-child {
+    color: rgba(51, 51, 51, 1);
+}
