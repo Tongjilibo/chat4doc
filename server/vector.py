@@ -1,7 +1,23 @@
 '''向量的存储，查询，检索模块
 '''
+from fastapi import FastAPI
+import uvicorn
+from bert4vector import BertVector
 
-def extract_text_from_pdf(file_path: str):
+app = FastAPI()
+bertvec = BertVector('E:/pretrain_ckpt/simbert/sushen@simbert_chinese_tiny')
+
+@app.post('/add_corpus')
+async def add_corpus(request):
+    '''把text转为向量'''
+    pass
+
+@app.post('/search')
+async def search(request):
+    '''找出topk的结果'''
+    pass
+
+async def extract_text_from_pdf(file_path: str):
     import PyPDF2
     contents = []
     with open(file_path, 'rb') as f:
@@ -19,3 +35,14 @@ def extract_text_from_pdf(file_path: str):
             if new_text:
                 contents.append(new_text)
     return contents
+
+
+@app.post('/text2vec')
+async def text2vec(request):
+    '''把text转为向量'''
+    content = await extract_text_from_pdf()
+    # 调用vector的接口，把文字转为向量
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=8100)
