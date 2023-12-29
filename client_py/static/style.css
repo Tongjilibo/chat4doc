@@ -1,0 +1,164 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #edeff2;
+  font-family: "Calibri", "Roboto", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    /* background: black; */
+    color: white;
+  }
+}
+
+.chat_window {
+  position: absolute;
+  width: calc(100% - 20px);
+  max-width: 800px;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.top_menu {
+  background-color: #fff;
+  width: 100%;
+  padding: 20px 0 15px;
+  box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+}
+
+.top_menu .title {
+  text-align: center;
+  color: #bcbdc0;
+  font-size: 20px;
+}
+
+.messages {
+  position: relative;
+  list-style: none;
+  padding: 20px 10px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.messages div {
+  text-align: left;
+  color: green;
+}
+
+.messages pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.bottom_wrapper {
+  clear: both;
+  position: relative;
+  width: 100%;
+  background-color: #f6f6f6;
+  padding: 20px;
+  border-radius: 0 0 10px 10px;
+}
+
+.bottom_wrapper textarea {
+  width: calc(100% - 80px);
+  border: none;
+  padding: 10px;
+  border-radius: 3px;
+  resize: none;
+  font-size: 16px;
+  height: 40px; /* 设置输入框的高度 */
+  vertical-align: middle; /* 垂直居中 */
+}
+
+.bottom_wrapper button {
+  width: 60px;
+  height: 40px;
+  margin-left: 10px; /* 增加左边距 */
+  font-size: 16px;
+  border: none;
+  border-radius: 3px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  vertical-align: middle; /* 垂直居中 */
+}
+
+.bottom_wrapper button:hover {
+  background-color: #3e8e41;
+}
+
+.bottom_wrapper button:focus {
+  outline: none;
+}
+
+/* 新增一个typing类，用于显示动画效果 */
+.typing {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: green;
+  position: relative;
+  animation: typing 1.5s infinite;
+}
+
+.dark {
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .chat_window {
+    background-color: #333;
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+  }
+
+  .top_menu {
+    background-color: #222;
+    box-shadow: 0 1px 30px rgba(255, 255, 255, 0.1);
+  }
+
+  .top_menu .title {
+    color: #ccc;
+  }
+
+  .bottom_wrapper {
+    background-color: #222;
+    box-shadow: 0 1px 30px;
+    color: rgba(255, 255, 255, 0.1);
+  }
+
+  .bottom_wrapper textarea {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .bottom_wrapper button {
+    background-color: #4CAF50;
+  }
+
+  .bottom_wrapper button:hover {
+    background-color: #3e8e41;
+  }
+}
+
+/* 定义typing动画，让小圆点在水平方向上移动 */
+@keyframes typing {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: calc(100% - 20px);
+  }
+  100% {
+    left: 0;
+  }
+}

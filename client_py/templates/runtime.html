@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>华安基金-智能提取助手</title>
     <link href="/static/css/runtime.css" rel="stylesheet"/>
-
+    <link href="/static/style.css" rel="stylesheet"/>
+    <!--引入animate.css库-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
 </head>
 
@@ -17,6 +19,10 @@
     </header>
     <main>
         <div class="wrapper">
+            <div class="reference">
+                <iframe id="pdf" src="{{ pdf }}" view="fit" frameborder="0" ></iframe>
+            </div>
+
             <div class="preview">
                 <div class="toolbar">
                     <div>
@@ -28,48 +34,29 @@
                     </div>
                 </div>
                 <div class="doc">
-
-                    <table>
-                        <caption>
-                            {{ file }}
-                        </caption>
-                        <thead>
-                        <tr>
-                            <th>要素</th>
-                            <th>文本</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for key in keys_map %}
-                        <tr>
-                            <td onclick="showText('{{key}}')">{{key}}</td>
-                            <td>
-                                {% for entitiy in keys_map[key] %}
-                                <div>
-                                    {% for text in entitiy[0] %}
-                                    <label onclick="showText('{{ key }}#{{ entitiy[1] }}')">[第{{entitiy[1]}}页]:</label>
-                                    <span>{{ text }}</span>
-                                    {% endfor %}
-                                </div>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endfor%}
-
-
-                        </tbody>
-                    </table>
-
-
+                    <div class="top_menu">
+                        <div class="title">ChatGPT API</div>
+                    </div>
+                    <ul class="messages" style="height: calc(100% - 140px)">
+                        <div style="text-align: left">
+                            <pre style="white-space: pre-wrap; word-wrap:break-word" id="chatlog"></pre>
+                        </div>
+                    </ul>
+                    <div class="bottom_wrapper clearfix">
+                        <textarea class="message_input_wrapper" placeholder="点击这里输入问题，回车提交，按shift+回车换行" id="chatinput"></textarea>
+                        <button class="send_message" id="sendbutton">提交</button>
+                    </div>
                 </div>
-            </div>
-            <div class="reference">
-                <iframe id="pdf" src="{{ pdf }}" view="fit" frameborder="0" ></iframe>
+
+
             </div>
         </div>
         </form>
     </main>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js"></script>
+<script src="/static/script.js"></script>
 <script type="application/javascript">
     function showAll() {
         var form = document.getElementsByTagName("form")[0];
@@ -90,6 +77,7 @@
         form.appendChild(inputEl);
         form.submit();
     }
+
 </script>
 
 </body>
