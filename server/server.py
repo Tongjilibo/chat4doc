@@ -6,19 +6,11 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from bert4vector import BertVector
 import json
+import aiohttp
 
 
 app = FastAPI()
-bertvec = BertVector('E:\pretrain_ckpt\embedding\moka-ai@m3e-base')
-
-@app.post('/search')
-async def search(request: Request):
-    '''找出topk的结果'''
-    data = await request.body()
-    data = json.loads(jsonable_encoder(data))
-    queries = data['query']
-    resp = bertvec.search(queries, topk=5)
-    return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
+bertvec = BertVector('E:\pretrain_ckpt\embedding\moka-ai@m3e-base', device='cuda')
 
 
 async def extract_text_from_pdf(file_path:str=None, file: UploadFile = File(...)):
@@ -53,5 +45,42 @@ async def text2vec(file: UploadFile = File(...)):
     return content
 
 
+@app.post('/search')
+async def search(request: Request):
+    '''找出topk的结果'''
+
+    # 检索对应的文档
+    data = await request.body()
+    data = json.loads(jsonable_encoder(data))
+    queries = data['query']
+    resp = bertvec.search(queries, topk=5)[queries]
+
+    message = ''
+    for i, item in enumerate(resp, start=1):
+        message += f"参考材料{i}: {item['text']}\n"
+    message += f'根据上述材料回答：{queries}'
+
+    system = '你是一个文档问答助手，请根据下述的问题和参考材料进行回复，如果问题在参考材料中找不到，请回复不知道，不允许随意编造答案。'
+    data = {
+        "messages": [
+            {
+                "content": message,
+                "role": "user"
+            },
+            {
+                "content": system,
+                "role": "system"
+            }
+        ],
+        "model": "default",
+        "stream": False
+    }
+    
+    async with aiohttp.ClientSession() as session:
+        async with session.post('http://127.0.0.1:8000/chat', json=data) as response:
+            resp = await response.text()
+    print(resp)
+    return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
+
 if __name__ == '__main__':
-    uvicorn.run(app='vector:app', host='0.0.0.0', port=8100, reload=True)
+    uvicorn.run(app='server:app', host='0.0.0.0', port=8100, reload=True, workers=1)

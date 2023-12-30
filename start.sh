@@ -1,2 +1,2 @@
-python ./server/llm.py &
-python ./server/vector.py &
+python ./server/llm.py
+python ./server/sever.py

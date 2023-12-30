@@ -24,8 +24,20 @@ document.getElementById("sendbutton").addEventListener("click", function () {
         document.getElementById("chatinput").value = "";
         // Send the message to the chatbot
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/chat/get?msg=" + message);
-        xhr.send();
+        xhr.open("POST", "http://127.0.0.1:8000/chat");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        var request = {
+            "messages": [
+                {
+                    "content": message,
+                    "role": "user"
+                }
+            ],
+            "model": "default",
+            "stream": false
+        }
+
+        xhr.send(JSON.stringify(request));
         // Display "typing" message while the bot is thinking
         var typingMessage = document.createElement("div");
         // 新增一个小圆点元素，添加typing类
@@ -37,7 +49,9 @@ document.getElementById("sendbutton").addEventListener("click", function () {
         xhr.onload = function () {
             // Append the chatbot's response to the chatlog
             chatlog.removeChild(typingMessage);
-            response.innerHTML = "🤔<br>" + message + "<br>🤖" + marked.parse(xhr.responseText);
+            var resp = JSON.parse(xhr.responseText)['choices'][0]['message']['content']
+            // console.log(resp);
+            response.innerHTML = "<br>🤔" + message + "<br>🤖" + resp;
             // 给response添加一个动画类
             response.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
             chatlog.appendChild(response);
