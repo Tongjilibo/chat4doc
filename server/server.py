@@ -70,10 +70,10 @@ async def search(request: Request):
     queries = data['query']
     resp = bertvec.search(queries, topk=5)[queries]
 
-    message = ''
+    reference = []
     for i, item in enumerate(resp, start=1):
-        message += f"参考材料{i}: {item['text']}\n"
-    message += f'根据上述材料回答：{queries}'
+        reference.append(f"[{i}]. {item['text']}")
+    message = '\n'.join(reference) + f'根据上述材料回答：{queries}'
 
     system = '你是一个文档问答助手，请根据下述的问题和参考材料进行回复，如果问题在参考材料中找不到，请回复不知道，不允许随意编造答案。'
     data = {
@@ -93,8 +93,10 @@ async def search(request: Request):
     
     async with aiohttp.ClientSession() as session:
         async with session.post('http://127.0.0.1:8000/chat', json=data) as response:
-            resp = await response.json()
-
+            content = await response.json()
+            content = content['choices'][0]['message']['content']
+    
+    resp = {'content': content, 'reference': '\n'.join(reference)}
     return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
 
 if __name__ == '__main__':

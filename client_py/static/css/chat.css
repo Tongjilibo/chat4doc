@@ -31,6 +31,18 @@ body {
   height: 800px;
 } */
 
+#reference_summary {
+  color: gray
+}
+
+#reference {
+  color: gray
+}
+
+#reference_summary:hover {
+  cursor: pointer;
+}
+
 .top_menu {
   background-color: #fff;
   width: 100%;
