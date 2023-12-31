@@ -88,14 +88,6 @@ main .wrapper .logo {
     padding-top: 50px;
 }
 
-main .wrapper .brief {
-
-}
-
-main .wrapper .upload {
-
-}
-
 main .wrapper .upload .ready, .uploading, .done {
     width: 280px;
     margin: auto;

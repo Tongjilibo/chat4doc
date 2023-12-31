@@ -9,6 +9,7 @@ body,
     font-weight: normal;
     line-height: normal;
     letter-spacing: 0;
+    overflow: hidden;
 }
 
 canvas {
@@ -65,10 +66,6 @@ footer a {
     font-size: 12px;
 }
 
-main {
-
-}
-
 main .wrapper {
     display: flex;
     justify-content: flex-start;
@@ -107,85 +104,22 @@ main .wrapper .preview .toolbar a img {
     padding: 0 5px;
 }
 
-main .wrapper .preview .doc {
+main .wrapper .preview .chatwindow {
     border-radius: 8px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0 4px 10px 0 rgba(0, 80, 250, 0.32);
-    height: 790px;
+    height: calc(100vh - 120px);
     overflow-y: scroll;
-    padding: 0 30px 30px;
-}
-
-main .wrapper .preview .doc table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-main .wrapper .preview .doc table caption {
-    color: rgba(51, 51, 51, 1);
-    font-weight: bold;
-    font-size: 20px;
-    text-align: center;
-    padding: 30px 0;
-}
-
-main .wrapper .preview .doc table th {
-    border: 1px solid rgba(200, 200, 200, 1);
-    background: rgba(20, 100, 250, 0.08);
-    color: rgba(51, 51, 51, 1);
-    font-weight: bold;
-    font-size: 14px;
-    line-height: normal;
-    letter-spacing: 0;
-    text-align: center;
-    height: 36px;
-}
-
-main .wrapper .preview .doc table thead th:first-child {
-    border-radius: 4px 0 0 0;
-}
-
-main .wrapper .preview .doc table thead th:last-child {
-    border-radius: 0 4px 0 0;
-}
-
-main .wrapper .preview .doc table tbody td {
-    border: 1px solid rgba(200, 200, 200, 1);
-    background: rgba(255, 255, 255, 1);
-    padding: 4px 6px;
-}
-
-main .wrapper .preview .doc table tbody tr td:first-child {
-    background: rgba(245, 245, 245, 1);
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-main .wrapper .preview .doc table tbody tr td:last-child {
-    width: 100%;
-}
-
-main .wrapper .preview .doc table tbody tr td div {
-    display: flex;
-    justify-content: flex-start;
-}
-
-main .wrapper .preview .doc table tbody tr td div label {
-    cursor: pointer;
-}
-
-main .wrapper .preview .doc table tbody tr td div span {
-    flex: 1;
 }
 
 main .wrapper .reference {
     margin-top: 10px;
-    height: 860px;
+    height: 100vh;
     overflow: hidden;
 }
 
 main .wrapper .reference iframe {
-    height: 860px;
+    height: calc(100vh - 60px - 1%);
     width: 100%;
     border: none;
 }

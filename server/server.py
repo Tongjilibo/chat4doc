@@ -3,13 +3,28 @@
 from fastapi import FastAPI, UploadFile, File, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from bert4vector import BertVector
 import json
 import aiohttp
+import argparse
+
+parser = argparse.ArgumentParser(description='llm')
+parser.add_argument('--port', default=8000)
+args = parser.parse_args()
+port = int(args.port)
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"] , #这里可以填写["*"]，表示允许任意ip
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 bertvec = BertVector('E:\pretrain_ckpt\embedding\moka-ai@m3e-base', device='cuda')
 
 
@@ -64,12 +79,12 @@ async def search(request: Request):
     data = {
         "messages": [
             {
-                "content": message,
-                "role": "user"
-            },
-            {
                 "content": system,
                 "role": "system"
+            },
+            {
+                "content": message,
+                "role": "user"
             }
         ],
         "model": "default",
@@ -78,9 +93,9 @@ async def search(request: Request):
     
     async with aiohttp.ClientSession() as session:
         async with session.post('http://127.0.0.1:8000/chat', json=data) as response:
-            resp = await response.text()
-    print(resp)
+            resp = await response.json()
+
     return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
 
 if __name__ == '__main__':
-    uvicorn.run(app='server:app', host='0.0.0.0', port=8100, reload=True, workers=1)
+    uvicorn.run(app='server:app', host='0.0.0.0', port=port, reload=True)

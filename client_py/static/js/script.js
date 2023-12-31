@@ -22,21 +22,28 @@ document.getElementById("sendbutton").addEventListener("click", function () {
     } else {
         // Clear the input field
         document.getElementById("chatinput").value = "";
+        
         // Send the message to the chatbot
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://127.0.0.1:8000/chat");
-        xhr.setRequestHeader("Content-Type", "application/json");
-        var request = {
-            "messages": [
-                {
-                    "content": message,
-                    "role": "user"
-                }
-            ],
-            "model": "default",
-            "stream": false
-        }
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("POST", "http://127.0.0.1:8000/chat");
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // var request = {
+        //     "messages": [
+        //         {
+        //             "content": message,
+        //             "role": "user"
+        //         }
+        //     ],
+        //     "model": "default",
+        //     "stream": false
+        // }
 
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://127.0.0.1:8100/search");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Access-Control-Allow-Origin", "");
+        var request = {"query": message};
+        console.log(JSON.stringify(request));
         xhr.send(JSON.stringify(request));
         // Display "typing" message while the bot is thinking
         var typingMessage = document.createElement("div");
@@ -49,6 +56,7 @@ document.getElementById("sendbutton").addEventListener("click", function () {
         xhr.onload = function () {
             // Append the chatbot's response to the chatlog
             chatlog.removeChild(typingMessage);
+            console.log(xhr.responseText)
             var resp = JSON.parse(xhr.responseText)['choices'][0]['message']['content']
             // console.log(resp);
             response.innerHTML = "<br>🤔" + message + "<br>🤖" + resp;

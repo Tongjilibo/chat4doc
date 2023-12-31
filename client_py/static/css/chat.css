@@ -16,7 +16,7 @@ body {
   }
 }
 
-.chat_window {
+/* .chat_window {
   position: absolute;
   width: calc(100% - 20px);
   max-width: 800px;
@@ -25,15 +25,17 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
   overflow: hidden;
-}
+  margin-top: 200px;
+  height: 800px;
+} */
 
 .top_menu {
   background-color: #fff;
   width: 100%;
   padding: 20px 0 15px;
-  box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 30px rgba(20, 100, 250, 0.1);
 }
 
 .top_menu .title {
@@ -116,37 +118,34 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .chat_window {
-    background-color: #333;
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
-  }
-
   .top_menu {
-    background-color: #222;
-    box-shadow: 0 1px 30px rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
   }
 
   .top_menu .title {
-    color: #ccc;
-  }
-
-  .bottom_wrapper {
-    background-color: #222;
-    box-shadow: 0 1px 30px;
-    color: rgba(255, 255, 255, 0.1);
-  }
-
-  .bottom_wrapper textarea {
-    background-color: #333;
     color: #fff;
   }
 
+  .bottom_wrapper {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 1px 30px;
+    color: #fff;
+  }
+
+  .bottom_wrapper textarea {
+    background-color: rgba(255, 255, 255, 1);
+    color: gray;
+    overflow: hidden;
+  }
+
   .bottom_wrapper button {
-    background-color: #4CAF50;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: rgba(0, 0, 0, 0.7)
   }
 
   .bottom_wrapper button:hover {
-    background-color: #3e8e41;
+    background-color: rgba(255, 255, 255, 0.9);
   }
 }
 
