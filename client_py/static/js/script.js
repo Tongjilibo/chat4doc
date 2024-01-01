@@ -12,17 +12,23 @@ document.getElementById("sendbutton").addEventListener("click", function () {
     // Get the user's message from the input field
     var message = document.getElementById("chatinput").value;
     var chatlog = document.getElementById("chatlog");
+    var query = document.createElement("div");
     var response = document.createElement("div");
     var reference_summary = document.createElement("div");
     var reference = document.createElement("div");
-    reference_summary.onclick = toggleCollapse
+    query.classList.add('query')
+    response.classList.add('response')
+    reference_summary.onclick = function () {
+        toggleCollapse(reference);
+    }
     reference_summary.id = 'reference_summary'
     reference.id = 'reference'
     reference.style.height = '0px'
     reference.style.overflow = 'hidden'
 
     if (message.length < 1) {
-        response.innerHTML = "🤔<br>🤖<br>Message cannot be null\n问题不能为空";
+        query.innerHTML = "🤔<br>"
+        response.innerHTML = "🤖<br>Message cannot be null\n问题不能为空";
         // 给response添加一个动画类
         response.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
         chatlog.appendChild(response);
@@ -30,7 +36,7 @@ document.getElementById("sendbutton").addEventListener("click", function () {
     } else {
         // Clear the input field
         document.getElementById("chatinput").value = "";
-        
+
         // 直接向llm请求
         // var xhr = new XMLHttpRequest();
         // xhr.open("POST", "http://127.0.0.1:8000/chat");
@@ -45,12 +51,12 @@ document.getElementById("sendbutton").addEventListener("click", function () {
         //     "model": "default",
         //     "stream": false
         // }
-        
+
         // 向量检索+llm
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://127.0.0.1:8100/search");
         xhr.setRequestHeader("Content-Type", "application/json");
-        var request = {"query": message};
+        var request = { "query": message };
         xhr.send(JSON.stringify(request));
 
         // Display "typing" message while the bot is thinking
@@ -66,30 +72,41 @@ document.getElementById("sendbutton").addEventListener("click", function () {
             chatlog.removeChild(typingMessage);
             var resp = JSON.parse(xhr.responseText)
             // console.log(resp);
-            response.innerHTML = "<br>🤔" + message + "<br>🤖" + resp['content'];
+            query.innerHTML = "<br><span>" + message + "</span>🤔<br><br>"
+            response.innerHTML = "🤖<span>" + resp['content'] + "</span><br><br>";
             reference_summary.innerHTML = '[出处]...'
             reference.innerHTML = resp['reference'];
-            
+
             // 给response添加一个动画类
+            query.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
+            chatlog.appendChild(query);
+            query.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
             response.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
-            reference_summary.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
-            reference.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
             chatlog.appendChild(response);
+            response.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+            reference_summary.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
             chatlog.appendChild(reference_summary)
+            reference_summary.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+            reference.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
             chatlog.appendChild(reference)
-            response.scrollIntoView({ behavior: 'smooth', block: 'end'});
-            reference_summary.scrollIntoView({ behavior: 'smooth', block: 'end'});
-            reference.scrollIntoView({ behavior: 'smooth', block: 'end'});
+            reference.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }
 });
 
-function toggleCollapse() {
-    var longText = document.getElementById("reference"); // 获取要折叠的元素
-    console.log('收起')
+function toggleCollapse(longText) {
+    // var longText = document.getElementById("reference"); // 获取要折叠的元素
     if (longText.style.height === "0px") { // 当前是折叠状态
         longText.style.height = "auto"; // 展开
     } else {
         longText.style.height = "0px"; // 折叠
     }
-}
+};
+
+document.getElementById("clear_history").addEventListener("click", function () {
+    chatlog = document.getElementById("chatlog");
+    chatlog.innerHTML = ""
+});

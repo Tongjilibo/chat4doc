@@ -1,6 +1,8 @@
-# chatdoc
-RAG
+# chat4doc
+RAG的最小实现
+![chat4doc](https://github.com/Tongjilibo/chat4doc/tree/master/doc/example.png)
 
+## Todo
 
 ## reference
 - [chatpdf](https://github.com/shibing624/ChatPDF)

@@ -31,8 +31,26 @@ body {
   height: 800px;
 } */
 
+.query {
+  text-align: right;
+}
+
+.query span {
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.32);
+  padding: 5px;
+}
+
+.response span{
+  border-radius: 4px;
+  background: rgba(0, 0, 50, 0.1);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.32);
+  padding: 5px;
+}
+
 #reference_summary {
-  color: gray
+  color: gray;
 }
 
 #reference {
@@ -65,7 +83,7 @@ body {
 }
 
 .messages div {
-  text-align: left;
+  /* text-align: left; */
   color: green;
 }
 
@@ -92,6 +110,18 @@ body {
   font-size: 16px;
   height: 40px; /* 设置输入框的高度 */
   vertical-align: middle; /* 垂直居中 */
+}
+
+.bottom_wrapper #clear_history {
+  border: none;
+  margin: 0;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+
+.bottom_wrapper #clear_history:hover {
+  cursor: pointer;
 }
 
 .bottom_wrapper button {

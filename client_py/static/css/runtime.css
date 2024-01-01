@@ -100,15 +100,11 @@ main .wrapper .preview .toolbar a {
     border: 1px solid rgba(200, 200, 200, 1);
 }
 
-main .wrapper .preview .toolbar a img {
-    padding: 0 5px;
-}
-
 main .wrapper .preview .chatwindow {
     border-radius: 8px;
     background: rgba(255, 255, 255, 1);
     box-shadow: 0 4px 10px 0 rgba(0, 80, 250, 0.32);
-    height: calc(100vh - 120px);
+    height: calc(100vh - 150px);
     /* overflow-y: scroll; */
 }
 

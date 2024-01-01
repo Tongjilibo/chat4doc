@@ -78,9 +78,9 @@ async def call_api(request, save_path, api_url):
     return file_name, response.json()
 
 
-# =======================pdf_extract=======================
-@app.route(load_config('webui', 'pdf_extract'), methods=['GET', 'POST'])
-async def pdf_extract_upload(request):
+# =======================chat4doc=======================
+@app.route(load_config('webui', 'chat4doc'), methods=['GET', 'POST'])
+async def chat4doc_upload(request):
     if request.method == 'GET':
         return template('./upload.html')
     if request.method == 'POST':
@@ -95,11 +95,11 @@ async def pdf_extract_upload(request):
 
             data = {'file': file}  # {'file': open('C:/Users/user/Desktop/资料概要.pdf', 'rb')}
             requests.post(url=load_config('api', 'text2vec'), files=data)
-            return response.redirect(app.url_for('pdf_extract_show', file=file_name))
+            return response.redirect(app.url_for('chat4doc_show', file=file_name))
 
 
-@app.route(load_config('webui', 'pdf_extract')+'/show/<file>', methods=['GET', 'POST'])
-async def pdf_extract_show(request, file):
+@app.route(load_config('webui', 'chat4doc')+'/show/<file>', methods=['GET', 'POST'])
+async def chat4doc_show(request, file):
     import urllib.parse
     file = urllib.parse.unquote(file)
     user_url = await get_user_path(request, url=True)
@@ -108,7 +108,7 @@ async def pdf_extract_show(request, file):
         if 'show_all' in request.form.keys():
             return template('./runtime.html', pdf=pdf+'#toolbar=0', file=file)
         elif 'upload' in request.form.keys():
-            return response.redirect(app.url_for('pdf_extract_upload'))
+            return response.redirect(app.url_for('chat4doc_upload'))
         elif 'show_text' in request.form.keys():
             return template('./runtime.html', pdf=pdf+f'#toolbar=0', file=file)
 
