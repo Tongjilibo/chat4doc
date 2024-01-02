@@ -45,42 +45,28 @@ def template(tpl, **kwargs):
     return response.html(template.render(kwargs))
 
 
-async def call_api(request, save_path, api_url):
-    '''上传并解析pdf得到对应结果'''
-    # 把file拷贝到指定的文件位置
-    file = request.files.get('file')
-    file_name = file.name.split('.')[0].replace(' ', '')
-    upload_path = os.path.join(save_path, file_name, file.name)  # 保存文件地址
-    os.makedirs(os.path.join(save_path, file_name), exist_ok=True)
-    with open(upload_path, 'wb') as f:
-        f.write(file.body)
-
-    data = {'file': file}  # {'file': open('C:/Users/user/Desktop/资料概要.pdf', 'rb')}
-    headers = {"Content-type": "application/json"}
-    response = requests.post(url=api_url, headers=headers, files=data)
-    return file_name, response.json()
-
-
-# =======================chat4doc=======================
+# upload页面
 @app.route(route_, methods=['GET', 'POST'])
 async def chat4doc_upload(request):
     if request.method == 'GET':
         return template('./upload.html')
     if request.method == 'POST':
         if 'analysis' in request.form:
+            # 把用户上传的文件缓存到前端本地
             save_path = await get_user_path(request)
             file = request.files.get('file')
             file_name = file.name.split('.')[0].replace(' ', '')
-            upload_path = os.path.join(save_path, file_name, file.name)  # 保存文件地址
+            upload_path = os.path.join(save_path, file_name, file.name)
             os.makedirs(os.path.join(save_path, file_name), exist_ok=True)
             with open(upload_path, 'wb') as f:
                 f.write(file.body)
 
-            data = {'file': file}  # {'file': open('C:/Users/user/Desktop/资料概要.pdf', 'rb')}
+            data = {'file': file}
             requests.post(url=text2vec_url, files=data)
             return response.redirect(app.url_for('chat4doc_show', file=file_name))
 
 
+# 详情页面
 @app.route(route_+'/show/<file>', methods=['GET', 'POST'])
 async def chat4doc_show(request, file):
     import urllib.parse
@@ -89,25 +75,14 @@ async def chat4doc_show(request, file):
     pdf = user_url + f'/{file}/{file}.pdf'  # pdf用于展示的url
     if request.method == 'POST':
         if 'show_all' in request.form.keys():
-            return template('./runtime.html', pdf=pdf+'#toolbar=0', file=file)
+            return template('./runtime.html', pdf=pdf+'#toolbar=0')
         elif 'upload' in request.form.keys():
             return response.redirect(app.url_for('chat4doc_upload'))
         elif 'show_text' in request.form.keys():
-            return template('./runtime.html', pdf=pdf+f'#toolbar=0', file=file)
+            return template('./runtime.html', pdf=pdf+f'#toolbar=0')
 
     if request.method == 'GET':
-        return template('./runtime.html', pdf=pdf, file=file)
-
-
-def get_keys_map(pages_results):
-    keys_map = {}
-    for item in pages_results:
-        label = item['label']
-        page = item['page']
-        context = item.get('context')
-        keys_map[label] = keys_map.get(label, [])
-        keys_map[label].append([[context], page])
-    return pages_results, keys_map
+        return template('./runtime.html', pdf=pdf)
 
 
 if __name__ == '__main__':

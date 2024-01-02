@@ -37,16 +37,16 @@ body {
 
 .query span {
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgb(229, 229, 229);
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.32);
-  padding: 5px;
+  padding: 4px;
 }
 
 .response span{
   border-radius: 4px;
-  background: rgba(0, 0, 50, 0.1);
+  background: rgb(229, 229, 229);
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.32);
-  padding: 5px;
+  padding: 4px;
 }
 
 #reference_summary {

@@ -19,6 +19,9 @@ server_url = config.server_url
 embedding_model_path = config.embedding_model_path
 server_route_text2vec = config.server_route_text2vec
 server_route_search = config.server_route_search
+server_route_summary = config.server_route_summary
+prompt_system = config.prompt_system
+prompt_system_summary = config.prompt_system_summary
 
 app = FastAPI()
 app.add_middleware(
@@ -58,17 +61,31 @@ async def extract_text_from_pdf(file_path:str=None, file: UploadFile = File(...)
 
 @app.post(server_route_text2vec)
 async def text2vec(file: UploadFile = File(...)):
-    '''把text转为向量'''
+    '''把text转为向量，上传文件的时候使用'''
     content = await extract_text_from_pdf(file=file)
     # 调用vector的接口，把文字转为向量
     bertvec.add_corpus(content)
     return content
 
 
+@app.post(server_route_summary)
+async def summary():
+    '''根据预料来总结文档'''
+
+    message = '请总结下述短文：'
+    id_ = 0
+    while (len(message) < 512) and (id_ < len(bertvec.corpus)):
+        message += bertvec.corpus[id_]
+        id_ += 1
+        
+    content = await call_llm(prompt_system_summary, message)
+    resp = {'content': content}
+    return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
+
+
 @app.post(server_route_search)
 async def search(request: Request):
-    '''找出topk的结果'''
-
+    '''找出topk的结果，并调用相应的大模型来结合知识库回答问题，点击发送按钮时候调用'''
     # 检索对应的文档
     data = await request.body()
     data = json.loads(jsonable_encoder(data))
@@ -79,8 +96,14 @@ async def search(request: Request):
     for i, item in enumerate(resp, start=1):
         reference.append(f"[{i}]. {item['text']}")
     message = '\n'.join(reference) + f'根据上述材料回答：{queries}'
+    content = await call_llm(prompt_system, message)
+    
+    resp = {'content': content, 'reference': '\n'.join(reference)}
+    return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
 
-    system = '你是一个文档问答助手，请根据下述的问题和参考材料进行回复，如果问题在参考材料中找不到，请回复不知道，不允许随意编造答案。'
+
+async def call_llm(system, message):
+    '''调用大模型'''
     data = {
         "messages": [
             {
@@ -100,9 +123,8 @@ async def search(request: Request):
         async with session.post(llm_url, json=data) as response:
             content = await response.json()
             content = content['choices'][0]['message']['content']
-    
-    resp = {'content': content, 'reference': '\n'.join(reference)}
-    return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
+    return content
+
 
 if __name__ == '__main__':
     host = re.findall('[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', server_url)[0]

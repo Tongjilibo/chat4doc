@@ -1,3 +1,8 @@
+// 配置相关的url
+var server_search_url = "http://127.0.0.1:8100/search"
+var server_summary_url = "http://127.0.0.1:8100/summary"
+
+
 // 加入回车提交支持，shift+回车换行
 var input = document.getElementById("chatinput");
 input.addEventListener("keydown", function (event) {
@@ -7,7 +12,41 @@ input.addEventListener("keydown", function (event) {
     }
 });
 
-// Add your JavaScript here
+window.onload = function(){
+    // 在此处编写需要在页面加载完成后执行的代码
+    var chatlog = document.getElementById("chatlog");
+    var response = document.createElement("div");
+    response.classList.add('response')
+
+    // 向量检索+llm
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", server_summary_url);
+    xhr.send();
+
+    // Display "typing" message while the bot is thinking
+    var typingMessage = document.createElement("div");
+    // 新增一个小圆点元素，添加typing类
+    var dot = document.createElement("div");
+    dot.classList.add("typing");
+    typingMessage.appendChild(dot);
+    chatlog.appendChild(typingMessage);
+    typingMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    xhr.onload = function () {
+        // Append the chatbot's response to the chatlog
+        chatlog.removeChild(typingMessage);
+        var resp = JSON.parse(xhr.responseText)
+
+        response.innerHTML = "🤖&nbsp;<span>" + resp['content'] + "</span><br><br>";
+
+        // 给response添加一个动画类
+        response.classList.add("animate__animated", "animate__lightSpeedInLeft", "dark");
+        chatlog.appendChild(response);
+        response.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+ };
+
+// 点击提交按钮
 document.getElementById("sendbutton").addEventListener("click", function () {
     // 读取config.json配置文件
     // var url = "E:/Github/chat4doc/config.json"
@@ -65,7 +104,6 @@ document.getElementById("sendbutton").addEventListener("click", function () {
 
         // 向量检索+llm
         var xhr = new XMLHttpRequest();
-        var server_search_url = "http://127.0.0.1:8100/search"
         xhr.open("POST", server_search_url);
         xhr.setRequestHeader("Content-Type", "application/json");
         var request = { "query": message };
@@ -83,7 +121,7 @@ document.getElementById("sendbutton").addEventListener("click", function () {
             // Append the chatbot's response to the chatlog
             chatlog.removeChild(typingMessage);
             var resp = JSON.parse(xhr.responseText)
-            // console.log(resp);
+
             query.innerHTML = "<br><span>" + message + "</span>&nbsp;🧑🏻<br><br>"
             response.innerHTML = "🤖&nbsp;<span>" + resp['content'] + "</span><br><br>";
             reference_summary.innerHTML = '[出处]...'

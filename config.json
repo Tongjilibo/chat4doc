@@ -5,5 +5,8 @@
     "server_url": "http://0.0.0.0:8100",
     "server_route_text2vec": "/text2vec",
     "server_route_search": "/search",
-    "webui_url": "http://0.0.0.0:8083/chat4doc"
+    "server_route_summary": "/summary",
+    "webui_url": "http://0.0.0.0:8083/chat4doc",
+    "prompt_system": "你是一个文档问答助手，请根据下述的问题和参考材料进行回复，如果问题在参考材料中找不到，请回复不知道，不允许随意编造答案。",
+    "prompt_system_summary": "你是一个文档总结助手，请根据提供的文档片段进行总结，要求表达简洁，字数不超过100个字。"
 }
