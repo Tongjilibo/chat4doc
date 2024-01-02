@@ -1,3 +1,19 @@
+// 读取config.json配置文件
+var url = "../data.json"
+// 申明一个XMLHttpRequest
+var request = new XMLHttpRequest();
+// 设置请求方法与路径
+request.open("get", url);
+// 不发送数据到服务器
+request.send(null);
+//XHR对象获取到返回信息后执行
+request.onload = function () {
+    // 解析获取到的数据
+    var config = JSON.parse(request.responseText);
+    var server_search_url = config["server_url"] + config["server_route_search"]
+}
+
+
 // 加入回车提交支持，shift+回车换行
 var input = document.getElementById("chatinput");
 input.addEventListener("keydown", function (event) {
@@ -54,7 +70,8 @@ document.getElementById("sendbutton").addEventListener("click", function () {
 
         // 向量检索+llm
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://127.0.0.1:8100/search");
+        // xhr.open("POST", "http://127.0.0.1:8100/search");
+        xhr.open("POST", server_search_url);
         xhr.setRequestHeader("Content-Type", "application/json");
         var request = { "query": message };
         xhr.send(JSON.stringify(request));

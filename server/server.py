@@ -9,12 +9,17 @@ from bert4vector import BertVector
 import json
 import aiohttp
 import argparse
+import torch
+from bert4torch.snippets import JsonConfig
+import re
 
-parser = argparse.ArgumentParser(description='llm')
-parser.add_argument('--port', default=8000)
-args = parser.parse_args()
-port = int(args.port)
 
+config = JsonConfig('./config.json')
+llm_url = config.llm_url
+server_url = config.server_url
+embedding_model_path = config.embedding_model_path
+server_route_text2vec = config.server_route_text2vec
+server_route_search = config.server_route_search
 
 app = FastAPI()
 app.add_middleware(
@@ -25,7 +30,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-bertvec = BertVector('E:\pretrain_ckpt\embedding\moka-ai@m3e-base', device='cuda')
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+bertvec = BertVector(embedding_model_path, device=device)
 
 
 async def extract_text_from_pdf(file_path:str=None, file: UploadFile = File(...)):
@@ -51,7 +57,7 @@ async def extract_text_from_pdf(file_path:str=None, file: UploadFile = File(...)
     return contents
 
 
-@app.post('/text2vec')
+@app.post(server_route_text2vec)
 async def text2vec(file: UploadFile = File(...)):
     '''把text转为向量'''
     content = await extract_text_from_pdf(file=file)
@@ -60,7 +66,7 @@ async def text2vec(file: UploadFile = File(...)):
     return content
 
 
-@app.post('/search')
+@app.post(server_route_search)
 async def search(request: Request):
     '''找出topk的结果'''
 
@@ -92,7 +98,7 @@ async def search(request: Request):
     }
     
     async with aiohttp.ClientSession() as session:
-        async with session.post('http://127.0.0.1:8000/chat', json=data) as response:
+        async with session.post(llm_url, json=data) as response:
             content = await response.json()
             content = content['choices'][0]['message']['content']
     
@@ -100,4 +106,6 @@ async def search(request: Request):
     return JSONResponse(content=resp, status_code=status.HTTP_200_OK)
 
 if __name__ == '__main__':
-    uvicorn.run(app='server:app', host='0.0.0.0', port=port, reload=True)
+    host = re.findall('[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', server_url)[0]
+    port = int(re.findall(':[0-9]+', server_url)[0][1:])
+    uvicorn.run(app='server:app', host=host, port=port, reload=True)

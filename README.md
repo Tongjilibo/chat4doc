@@ -4,6 +4,7 @@ RAG的最小实现
 ![chat4doc](https://github.com/Tongjilibo/chat4doc/blob/master/doc/example.png)
 
 ## Quick start
+- 配置config文件
 - 执行`sh start.sh`开启服务
 - 访问`http://localhost:8083/chat4doc`，并上传pdf进行解析
 

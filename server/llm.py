@@ -3,19 +3,22 @@
 '''
 
 from bert4torch.pipelines import ChatGlm2OpenaiApi
-import argparse
+from bert4torch.snippets import JsonConfig
+import re
 
-parser = argparse.ArgumentParser(description='llm')
-parser.add_argument('--port', default=8000)
-args = parser.parse_args()
-port = int(args.port)
 
-model_path = "E:/pretrain_ckpt/glm/chatglm2-6B"
+config = JsonConfig('./config.json')
+llm_model_path = config.llm_model_path
+llm_url = config.llm_url
+host = re.findall('[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', llm_url)[0]
+port = int(re.findall(':[0-9]+', llm_url)[0][1:])
+
+
 generation_config  = {'mode':'random_sample',
                       'maxlen':2048, 
                       'default_rtype':'logits', 
                       'use_states':True
                       }
 
-chat = ChatGlm2OpenaiApi(model_path, **generation_config)
-chat.run(port=port)
+chat = ChatGlm2OpenaiApi(llm_model_path, **generation_config)
+chat.run(host=host, port=port)

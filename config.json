@@ -1,0 +1,9 @@
+{
+    "llm_url": "http://0.0.0.0:8000/chat",
+    "llm_model_path": "E:/pretrain_ckpt/glm/chatglm2-6B",
+    "embedding_model_path": "E:/pretrain_ckpt/embedding/moka-ai@m3e-base",
+    "server_url": "http://0.0.0.0:8100",
+    "server_route_text2vec": "/text2vec",
+    "server_route_search": "/search",
+    "webui_url": "http://0.0.0.0:8083/chat4doc"
+}

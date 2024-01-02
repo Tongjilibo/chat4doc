@@ -1,17 +1,15 @@
 import os
 from sanic import Sanic, response
 import jinja2
-import json
-from utils import load_config
 import requests
-import argparse
+from bert4torch.snippets import JsonConfig
+import re
 
 
-# 参数解析
-parser = argparse.ArgumentParser(description='webui')
-parser.add_argument('--port', default=8083)
-args = parser.parse_args()
-port = int(args.port)
+config = JsonConfig('../config.json')
+webui_url = config.webui_url
+route_ = webui_url.split('/')[-1]
+text2vec_url = config.server_url + config.server_route_text2vec
 
 app = Sanic('default')
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('./templates'))
@@ -20,21 +18,6 @@ app.ctx.static_folder='./static'
 USER_DATA_CENTER = os.path.join(os.getcwd(), "static/user_data")  # 用户的目录地址
 USER_DATA_URL = '/static/user_data'  # 用户的目录url
 
-'''
-import requests
-import json
-
-content = requests.post('http://127.0.0.1:8100/text2vec', files={'file': open('C:/Users/user/Desktop/资料概要.pdf', 'rb')})
-print(content.text)
-print('done')
-
-
-header = {'Content-type': "application/json"}
-query = {'query': '基金经理是谁？'}
-content = requests.post('http://127.0.0.1:8100/search', headers=header, data=json.dumps(query))
-print(content.text)
-print('done')
-'''
 
 async def get_user_path(request, url=False):
     '''获取该用户文件缓存地址'''
@@ -79,7 +62,7 @@ async def call_api(request, save_path, api_url):
 
 
 # =======================chat4doc=======================
-@app.route(load_config('webui', 'chat4doc'), methods=['GET', 'POST'])
+@app.route(route_, methods=['GET', 'POST'])
 async def chat4doc_upload(request):
     if request.method == 'GET':
         return template('./upload.html')
@@ -94,11 +77,11 @@ async def chat4doc_upload(request):
                 f.write(file.body)
 
             data = {'file': file}  # {'file': open('C:/Users/user/Desktop/资料概要.pdf', 'rb')}
-            requests.post(url=load_config('api', 'text2vec'), files=data)
+            requests.post(url=text2vec_url, files=data)
             return response.redirect(app.url_for('chat4doc_show', file=file_name))
 
 
-@app.route(load_config('webui', 'chat4doc')+'/show/<file>', methods=['GET', 'POST'])
+@app.route(route_+'/show/<file>', methods=['GET', 'POST'])
 async def chat4doc_show(request, file):
     import urllib.parse
     file = urllib.parse.unquote(file)
@@ -128,4 +111,7 @@ def get_keys_map(pages_results):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port, debug=True, auto_reload=True)
+    host = re.findall('[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', webui_url)[0]
+    port = int(re.findall(':[0-9]+', webui_url)[0][1:])
+
+    app.run(host, port=port, debug=True, auto_reload=True)

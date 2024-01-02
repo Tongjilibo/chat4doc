@@ -2,3 +2,4 @@ python-multipart
 fastapi
 uvicorn
 bert4vector
+loguru
