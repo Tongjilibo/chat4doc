@@ -84,8 +84,8 @@ document.getElementById("sendbutton").addEventListener("click", function () {
             chatlog.removeChild(typingMessage);
             var resp = JSON.parse(xhr.responseText)
             // console.log(resp);
-            query.innerHTML = "<br><span>" + message + "</span>🤔<br><br>"
-            response.innerHTML = "🤖<span>" + resp['content'] + "</span><br><br>";
+            query.innerHTML = "<br><span>" + message + "</span>&nbsp;🧑🏻<br><br>"
+            response.innerHTML = "🤖&nbsp;<span>" + resp['content'] + "</span><br><br>";
             reference_summary.innerHTML = '[出处]...'
             reference.innerHTML = resp['reference'];
 

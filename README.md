@@ -6,7 +6,7 @@ RAG的最小实现
 ## Quick start
 - 配置config文件, 若修改需同步修改`client_py/static/js/script.js`中相关配置
 - 执行`sh start.sh`开启服务
-- 访问`http://localhost:8083/chat4doc`，并上传pdf进行解析
+- 访问[http://localhost:8083/chat4doc](http://localhost:8083/chat4doc)，并上传pdf进行解析
 
 ## 文件说明
 - `client_py`: 前端webui
