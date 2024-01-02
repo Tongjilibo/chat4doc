@@ -8,14 +8,13 @@ import uvicorn
 from bert4vector import BertVector
 import json
 import aiohttp
-import argparse
 import torch
 from bert4torch.snippets import JsonConfig
 import re
 
 
 config = JsonConfig('./config.json')
-llm_url = config.llm_url
+llm_url = config.llm_url.replace('0.0.0.0', '127.0.0.1')
 server_url = config.server_url
 embedding_model_path = config.embedding_model_path
 server_route_text2vec = config.server_route_text2vec

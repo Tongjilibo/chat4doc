@@ -1,3 +1,5 @@
 test_local
 __pycache__
 .vscode
+client_py/static/user_data
+__pycache__

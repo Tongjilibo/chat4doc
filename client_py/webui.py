@@ -9,7 +9,7 @@ import re
 config = JsonConfig('../config.json')
 webui_url = config.webui_url
 route_ = webui_url.split('/')[-1]
-text2vec_url = config.server_url + config.server_route_text2vec
+text2vec_url = (config.server_url + config.server_route_text2vec).replace('0.0.0.0', '127.0.0.1')
 
 app = Sanic('default')
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('./templates'))
